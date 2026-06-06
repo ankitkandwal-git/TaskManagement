@@ -12,6 +12,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +38,7 @@ const Register = () => {
       return;
     }
 
+    setLoading(true);
     try {
       const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
@@ -61,6 +63,8 @@ const Register = () => {
     } catch (err) {
       setError("Registration failed. Please try again.");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -136,9 +140,14 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full py-2 font-bold text-white transition rounded-lg shadow-lg bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+            disabled={loading}
+            className={`w-full py-2 font-bold text-white transition rounded-lg shadow-lg bg-gradient-to-r ${
+              loading
+                ? "from-purple-400 to-blue-400 cursor-not-allowed opacity-70"
+                : "from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+            }`}
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 

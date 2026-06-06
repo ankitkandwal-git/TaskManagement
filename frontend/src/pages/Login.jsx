@@ -10,6 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +26,7 @@ const Login = () => {
       return;
     }
 
+    setLoading(true);
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
@@ -53,6 +55,8 @@ const Login = () => {
     } catch (err) {
       console.error("Login failed:", err);
       setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,9 +104,14 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full py-2 font-bold text-white transition rounded-lg shadow-lg bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+            disabled={loading}
+            className={`w-full py-2 font-bold text-white transition rounded-lg shadow-lg bg-gradient-to-r ${
+              loading
+                ? "from-purple-400 to-blue-400 cursor-not-allowed opacity-70"
+                : "from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+            }`}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
