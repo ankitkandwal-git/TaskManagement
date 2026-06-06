@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 
-const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ const Login = () => {
 
     setLoading(true);
     try {
+      console.log(`Attempting login at: ${API_URL}/auth/login`);
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: {
