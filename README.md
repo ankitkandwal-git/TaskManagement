@@ -1,147 +1,211 @@
-# TaskManagement
+# Task Management Application
 
-A full-stack MERN-style Task Management application with React, Vite, Node.js, Express, MongoDB, and JWT authentication.
+A professional MERN stack Task Management Application featuring secure user authentication, protected routes, and a responsive dashboard built with React, Tailwind CSS, and MongoDB Atlas.
 
-## Features
+## 🌐 Live Demo
 
-- User authentication with JWT
-- Create, read, update, delete tasks
-- Toggle task status between pending and completed
-- Frontend form editing and task actions
-- Docker-ready backend and frontend services
-- MongoDB database support
+- Vercel: https://task-management-ecru-seven-51.vercel.app/
 
-## Project Structure
+## 🔥 Project Description
 
-```
+This application allows users to register and log in, then create, view, update, and delete personal tasks. Task status can be toggled between **Completed** and **Pending**, and the UI is optimized for desktop and mobile devices.
+
+## ⭐ Features
+
+- User Registration
+- User Login
+- JWT Authentication
+- Protected Routes
+- Create Task
+- View Tasks
+- Update Task
+- Delete Task
+- Mark Task as Completed / Pending
+- Responsive Dashboard UI
+
+## 🧰 Tech Stack
+
+- React.js (Vite)
+- Node.js
+- Express.js
+- MongoDB Atlas
+- JSON Web Tokens (JWT)
+- Tailwind CSS
+
+## 📁 Folder Structure
+
+```text
 TaskManagament/
-├── Backend/
+├── backend/              # Express backend service
 │   ├── Dockerfile
 │   ├── package.json
 │   ├── server.js
-│   ├── .env
+│   ├── .env              # environment variables (not committed)
 │   ├── src/
-│   │   ├── config/db.js
-│   │   ├── middleware/authMiddleware.js
-   │   │   └── index.js
-│   │   ├── models/Task.js
-│   │   ├── models/user.js
-│   │   └── routes/taskRoute.js
-│   │   └── routes/auth.js
+│   │   ├── config/       # database connection
+│   │   ├── controllers/  # request handlers
+│   │   ├── middleware/   # auth middleware
+│   │   ├── models/       # Mongoose schemas
+│   │   └── routes/       # API routes
 │   └── .gitignore
-├── frontend/
+├── frontend/             # Vite + React frontend app
 │   ├── Dockerfile
-│   ├── nginx.conf
 │   ├── package.json
 │   ├── vite.config.js
 │   ├── public/
 │   ├── src/
 │   │   ├── App.jsx
 │   │   ├── main.jsx
+│   │   ├── assets/
 │   │   ├── components/
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── TaskCard.jsx
-│   │   │   ├── TaskForm.jsx
-│   │   │   └── TaskList.jsx
-│   │   ├── pages/Dashboard.jsx
-│   │   ├── pages/Login.jsx
-│   │   ├── pages/Register.jsx
-│   │   ├── services/taskService.js
-│   │   └── utils/api.js
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── utils/
 │   └── .gitignore
 ├── docker-compose.yml
 └── README.md
 ```
 
-## Environment Variables
+## ⚙️ Installation Guide
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+- MongoDB Atlas account
+- Git
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repository-url>
+cd FullStack/TaskManagament
+```
+
+### 2. Install dependencies
+
+```bash
+cd backend
+npm install
+
+cd ../frontend
+npm install
+```
+
+## 🔐 Environment Variables
 
 ### Backend
-Create `Backend/.env` with:
+
+Create a `.env` file inside `backend/` with the following values:
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://admin:admin123@mongodb:27017/taskdb?authSource=admin
-JWT_SECRET=your_jwt_secret_key
-NODE_ENV=production
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_super_secret_jwt_key
 ```
 
-### Frontend
-Create `frontend/.env` with:
+### MongoDB Atlas setup instructions
+
+1. Log in to MongoDB Atlas and create a new cluster.
+2. Create a database user with read/write access.
+3. Add your IP address to the Network Access whitelist.
+4. Click **Connect**, choose **Connect your application**, and copy the connection string.
+5. Replace `<password>` with your database user password and set the database name.
+
+Example:
 
 ```env
-VITE_API_URL=http://localhost:5001
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/taskmanagement?retryWrites=true&w=majority
 ```
 
-> If you run with Docker Compose, the backend is exposed on host port `5001`.
+### JWT setup instructions
 
-## Local Development
+1. Generate a random secret string for JWT signing.
+2. Store that value in `backend/.env`.
+3. Keep this secret private and do not commit it to Git.
 
-### Backend
+Example generation command:
 
 ```bash
-cd TaskManagament/Backend
-npm install
-npm run dev
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
 ### Frontend
 
+Create a `.env` file inside `frontend/` with:
+
+```env
+VITE_API_BASE_URL=http://localhost:5000/api
+```
+
+## ▶️ Running the Application
+
+### Running Backend
+
 ```bash
-cd TaskManagament/frontend
-npm install
+cd backend
 npm run dev
 ```
 
-### Open the app
+The backend server should be available at `http://localhost:5000`.
 
-- Frontend: `http://localhost:5173`
-- Backend API: `http://localhost:5001`
-
-## Docker Setup
-
-### Build and run with Docker Compose
+### Running Frontend
 
 ```bash
-cd TaskManagament
-docker compose up -d --build
+cd frontend
+npm run dev
 ```
 
-### Stop services
+The frontend application should be available at `http://localhost:5173`.
 
-```bash
-docker compose down
-```
+## 🧪 API Endpoints
 
-### Access services
+### Authentication Endpoints
 
-- Frontend: `http://localhost`
-- Backend: `http://localhost:5001`
-- MongoDB: `mongodb://localhost:27017`
+| Method | Endpoint           | Description                        | Auth Required |
+| ------ | ------------------ | ---------------------------------- | ------------- |
+| POST   | `/api/auth/register` | Register a new user               | No            |
+| POST   | `/api/auth/login`    | Authenticate user and return JWT  | No            |
+| GET    | `/api/auth/me`       | Get current authenticated user    | Yes           |
 
-## Notes
+### Task Endpoints
 
-- The backend uses `authMiddleware` to validate JWT tokens on protected routes.
-- Task routes are scoped to the authenticated user.
-- The frontend `TaskForm` supports both create and edit modes.
-- The project ships with Dockerfiles for both frontend and backend.
+| Method | Endpoint             | Description                            | Auth Required |
+| ------ | -------------------- | -------------------------------------- | ------------- |
+| GET    | `/api/tasks`          | Get all tasks for the logged-in user   | Yes           |
+| POST   | `/api/tasks`          | Create a new task                      | Yes           |
+| PUT    | `/api/tasks/:id`      | Update a task                          | Yes           |
+| DELETE | `/api/tasks/:id`      | Delete a task                          | Yes           |
 
-## Helpful Commands
+> Protected endpoints require the request header: `Authorization: Bearer <token>`.
 
-```bash
-# Build backend only
-docker build -f Backend/Dockerfile -t taskmanagement-backend ./Backend
+## 📸 Screenshots
 
-# Build frontend only
-docker build -f frontend/Dockerfile -t taskmanagement-frontend ./frontend
+> Add screenshots of the app here once available.
 
-# Run the full stack
-docker compose up -d --build
-```
+- **Login / Register**: Clean authentication screens.
+- **Dashboard**: Task list with create, edit, delete, and status toggle.
+- **Responsive View**: Mobile-ready task dashboard.
 
-## Git Ignore
+## 🚀 Future Improvements
 
-Sensitive files such as `.env` are excluded via `.gitignore` in the project root, backend, and frontend directories.
+- Add user profile and settings
+- Add task categories and priorities
+- Implement due dates and reminders
+- Add search and filtering for tasks
+- Enable dark mode
+- Add email password reset support
 
-## License
+## 👨‍💻 Author
 
-This project is provided as-is for demonstration and development use.
+**Your Name**
+
+- GitHub: [@yourusername](https://github.com/yourusername)
+- LinkedIn: [Your Profile](https://www.linkedin.com/in/yourprofile)
+- Portfolio: [yourwebsite.com](https://yourwebsite.com)
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+Feel free to use, modify, and distribute this project under the MIT terms.
